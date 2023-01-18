@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const Review = require('../models/review');
+const { validatereviewProduct } = require('../middleware');
 
 
-router.post('/products/:productid/review', async(req, res) => {
+router.post('/products/:productid/review',validatereviewProduct, async(req, res) => {
 
+    try {
+        
     const { productid } = req.params;
     const { rating, comment } = req.body;
 
@@ -19,6 +22,10 @@ router.post('/products/:productid/review', async(req, res) => {
     await product.save();
 
     res.redirect(`/products/${productid}`);
+    }
+    catch (e) {
+        res.status(500).render('error', { err: e.message });
+    }
 });
 
 
