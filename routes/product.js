@@ -32,6 +32,7 @@ router.post('/products', validateProduct , async (req, res) => {
 
     await Product.create({ name, img, price: parseFloat(price), desc });
 
+        req.flash('success', 'successfully added a new product!');
     res.redirect('/products');
     }
     catch (e) {
@@ -46,7 +47,7 @@ router.get('/products/:id', async (req, res) => {
 
     const product = await Product.findById(id).populate('reviews');
 
-    res.render('products/show', { product });
+    res.render('products/show', { product});
    }
     catch (e) {
         res.status(500).render('error', { err: e.message });
@@ -75,7 +76,7 @@ router.patch('/products/:id', async (req, res) => {
     const { name, price, img, desc } = req.body;
 
     await Product.findByIdAndUpdate(id, { name, price, desc, img });
-
+        req.flash('msg', 'Edit Your Product Successfully');
     res.redirect(`/products/${id}`);
     }
     catch (e) {

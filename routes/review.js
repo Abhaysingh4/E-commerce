@@ -20,7 +20,7 @@ router.post('/products/:productid/review',validatereviewProduct, async(req, res)
 
     await review.save();
     await product.save();
-
+        req.flash('success', 'Added your review successfully');
     res.redirect(`/products/${productid}`);
     }
     catch (e) {
