@@ -27,7 +27,12 @@ app.use(methodOverride('_method'));
 const sessionConfig = {
     secret: 'weneedsomebettersecret',
     resave: false,
-    saveUninitialized:true
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now()+1000* 60 * 60 * 24 * 7 * 1,
+        maxAge:1000* 60 * 60 * 24 * 7 * 1
+    }
 }
 app.use(session(sessionConfig));
 app.use(flash());
