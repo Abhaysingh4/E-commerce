@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
-const { validateProduct } = require('../middleware');
+const { validateProduct, isLoggedIn } = require('../middleware');
 
 
 router.get('/products', async (req, res) => {
@@ -16,7 +16,8 @@ router.get('/products', async (req, res) => {
 });
 
 
-router.get('/products/new', (req, res) => {
+router.get('/products/new',isLoggedIn ,(req, res) => {
+    
     try {
         res.render('products/new');
     }
@@ -25,7 +26,7 @@ router.get('/products/new', (req, res) => {
     }
 });
 
-router.post('/products', validateProduct , async (req, res) => {
+router.post('/products',isLoggedIn, validateProduct , async (req, res) => {
     try {
         
     const { name, img, desc, price } = req.body;
@@ -55,7 +56,7 @@ router.get('/products/:id', async (req, res) => {
 });
 
 
-router.get('/products/:id/edit', async (req, res) => {
+router.get('/products/:id/edit',isLoggedIn, async (req, res) => {
     
     try {
         const { id } = req.params;
@@ -69,7 +70,7 @@ router.get('/products/:id/edit', async (req, res) => {
     }
 });
 
-router.patch('/products/:id', async (req, res) => {
+router.patch('/products/:id',isLoggedIn, async (req, res) => {
     
     try {
         const { id } = req.params;
@@ -85,7 +86,7 @@ router.patch('/products/:id', async (req, res) => {
 });
 
 
-router.delete('/products/:id', async(req, res) => {
+router.delete('/products/:id',isLoggedIn, async(req, res) => {
     
     try {
         const { id } = req.params;
