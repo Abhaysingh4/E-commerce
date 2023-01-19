@@ -1,8 +1,11 @@
 const { productSchema,reviewSchema } = require('./schemas');
 
 module.exports.isLoggedIn = (req, res, next) => {
+    
+    req.session.returnUrl = req.originalUrl;
+
     if (!req.isAuthenticated()) {
-        req.flash('error', 'you need to login first to do that');
+        req.flash('error', 'You need to login first to do that!');
         return res.redirect('/login');
     }
     next();

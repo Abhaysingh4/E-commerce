@@ -3,8 +3,8 @@ const router = express.Router();
 const User = require('../models/user');
 const passport = require('passport');
 
+
 router.get('/register', (req, res) => {
-    
     res.render('auth/signup');
 });
 router.post('/register', async (req, res) => {
@@ -34,11 +34,24 @@ router.post('/login',
     passport.authenticate('local', {
         failureRedirect: '/login',
         failureFlash: true
-    }), (req, res) => {
-        console.log(req.user);
-        req.flash('success', 'Welcome , You are Logged in Successfully');
-            return res.redirect('/products');
+    }),  (req, res) => {
+
+        req.flash('success', `Welcome Back  ${req.user.username} Again!!`);
+
+        let redirectUrl = req.session.returnUrl || '/products';
+        
+        console.log(redirectUrl);
+
+        if (redirectUrl && redirectUrl.indexOf('review') !== -1) {
+            redirectUrl = redirectUrl.split('/');
+            redirectUrl.pop();
+            redirectUrl = redirectUrl.join('/');
+        }
+
+        delete req.session.returnUrl;
+        res.redirect(redirectUrl);
 });
+
 router.get('/logout', function (req, res, next) {
     
     req.logout(function (err){
